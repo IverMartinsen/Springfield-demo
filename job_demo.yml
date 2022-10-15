@@ -1,0 +1,27 @@
+---
+kind: job
+apiVersion: batch/v1
+metadata:
+  name: jobdemo # the name for the job
+spec:
+  template:
+    spec:
+      containers:
+      - name: democontainer # a name for the container
+        image: "ivermartinsen/springfield_demo" # the Docker image to use
+        workingDir: /storage/test
+        command: ["/bin/bash", "-c"] # specify what should be executed when the job starts, i.e. which command to run in shell
+        args: ["source activate my_environment && python main.py"]
+        volumeMounts:         # boilerplate
+        - name: storage       # boilerplate
+          mountPath: /storage # boilerplate
+        env:
+        - name: WANDB_API_KEY
+          value: 9e0c61e66b874aa0b40cf64f58a3a25c8a3d60d4
+      volumes:
+      - name: storage          # boilerplate
+        persistentVolumeClaim: # boilerplate
+          claimName: storage   # boilerplate
+      restartPolicy: onFailure # boilerplate
+  backoffLimit: 0              # boilerplate
+...
